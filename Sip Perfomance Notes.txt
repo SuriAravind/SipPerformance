@@ -1,0 +1,106 @@
+																	Sip Perfomance Notes
+																	=====================
+
+
+
+
+address->provider->claim->claim_lines->proc_code
+address->provider->claim->claim_lines->dx_code
+address->provider->claim->subscriber->member
+address->provider->claim->member->subscriber
+address->member->subscriber->claim->claim_lines->proc_code
+address->member->subscriber->claim->claim_lines->dx_code
+address->member->subscriber->claim->provider
+address->member->claim->claim_lines->proc_code
+address->member->claim->claim_lines->dx_code
+address->member->claim->subscriber
+address->member->claim->provider
+
+
+Pro_c0de
+ 
+ Select Distint
+
+ Select * from procode where (procode->claim lines and claims->claim and claim ->provider and provider ->address)
+ union 
+ Select * from procode where ( procode->claim lines and claims->claim and claim ->subscriber and subscriber ->member and member ->address)
+ union
+ Select * from procode where ( procode->claim lines and claims->claim and claim->member and member ->address)
+ 
+
+					||
+					<>
+
+address |->provider->claim|->claim_lines|->proc_code
+	|		  |  		|->dx_code
+        |		  |->subscriber->member
+        |		  |>member->subscriber
+        |
+        |->member|->subscriber->claim|->claim_lines |->proc_code
+                 |                   |              |->dx_code
+ 		 |		     |->provider	
+                 |->claim|->claim_lines|->proc_code
+                         |             |->dx_code
+                         |
+                 	 |->subscriber
+                	 |->provider
+
+                         
+                 	 ||
+                 	 <>
+
+(parse table upto without sibbling=>collect the table)
+
+0		:	"address"
+1.1		:	"address" 					key 	=>		provider
+1.1.1		:	"address,provider,claim" 			key 	=>		claim_lines
+1.1.1.1		:	"address,provider,claim,claim_line" 		key 	=>		proc_code
+1.1.1.2		:	"address,provider,claim,claim_line" 		key 	=>		dx_code
+1.1.2		:	"address,provider,claim" 			key 	=>		subscriber,member
+1.1.3		:	"address,provider,claim" 			key 	=>		member,subscriber
+1.2		:	"address" 					key 	=>		member
+1.2.1		:	"address,member" 				key 	=>		subscriber,claim
+1.2.1.1		:	"address,member,subscriber,claim" 		key 	=>		claim_lines
+1.2.1.1.1	:	"address,member,subscriber,claim,claim_lines" 	key 	=>		proc_code
+1.2.1.1.2	:	"address,member,subscriber,claim,claim_lines" 	key	=>		dx_code
+1.2.1.2		:	"address,member,subscriber,claim" 		key 	=>		provider
+1.2.2		:	"address,member" 				key 	=>		claim
+1.2.2.1		:	"address,member,claim" 				key	=>		claim_lines
+1.2.2.1.1	:	"address,member,claim,claim_lines" 		key 	=>		proc_code
+1.2.2.1.2	:	"ddress,member,claim,claim_lines" 		key	=>		dx_code
+1.2.2.2		:	"address,member,claim" 				key 	=>		subscriber
+1.2.2.3		:	"address,member,claim" 				key 	=>		provider
+		
+		
+
+
+Reference Links:
+----------------
+
+https://github.com/uniVocity/univocity-examples
+
+
+Inputs
+
+
+List<primaryColumnName> col
+List<secondaryColumnName> cols
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
