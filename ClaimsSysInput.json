@@ -1,0 +1,162 @@
+{
+  "tableList": [
+    {
+      "name": "claim",
+      "columnQuery": "claim.CLAIM_ID as \"claim.CLAIM_ID\",claim.MEM_ID as \"claim.MEM_ID\",claim.PROV_ID as \"claim.PROV_ID\",claim.SUB_ID as \"claim.SUB_ID\",claim.claim_STATUS as \"claim.claim_STATUS\", claim.MEM_REL as \"claim.MEM_REL\", claim.ADM_FROM_DATE as \"claim.ADM_FROM_DATE\",claim.ADM_TO_DATE as \"claim.ADM_TO_DATE\", claim.DAYS as \"claim.DAYS\", claim.IS_LATE_FILED as \"claim.IS_LATE_FILED\"",
+      "filterQuery": "",
+      "relatedTables": [
+        "claim_lines",
+        "member",
+        "provider",
+        "subscriber"
+      ],
+      "keyColumns": [
+        "claim.MEM_ID",
+        "claim.PROV_ID",
+        "claim.SUB_ID",
+        "claim.CLAIM_ID"
+      ],
+      "relationshipList": [
+        "member->(member.MEM_ID = claim.MEM_ID)",
+        "provider->(provider.PROV_ID = claim.PROV_ID)",
+        "subscriber->(subscriber.SUB_ID = claim.SUB_ID)",
+        "claim_lines->(claim_lines.CLAIM_ID = claim.CLAIM_ID)"
+      ]
+    },
+    {
+      "name": "member",
+      "columnQuery": "member.ADDR_ID as \"member.ADDR_ID\", member.MEM_ID as \"member.MEM_ID\",member.PRIMARY_ADDR_TYPE as \"member.PRIMARY_ADDR_TYPE\",member.SECONDARY_ADDR_TYPE as \"member.SECONDARY_ADDR_TYPE\",member.SUB_ID as \"member.SUB_ID\", member.MEM_FIRST_NAME as \"member.MEM_FIRST_NAME\", member.MEM_LAST_NAME as \"member.MEM_LAST_NAME\",member.MEM_REL as \"member.MEM_REL\",member.MEM_SEX as \"member.MEM_SEX\",member.MEM_DOB as \"member.MEM_DOB\", member.FAMILY_LINK_ID as \"member.FAMILY_LINK_ID\",member.IS_SUB as \"member.IS_SUB\"",
+      "filterQuery": "",
+      "relatedTables": [
+        "address",
+        "subscriber",
+        "claim"
+      ],
+      "keyColumns": [
+        "member.MEM_ID",
+        "member.ADDR_ID",
+        "member.PRIMARY_ADDR_TYPE",
+        "member.SECONDARY_ADDR_TYPE",
+        "member.SUB_ID"
+      ],
+      "relationshipList": [
+        "claim->(claim.MEM_ID = member.MEM_ID)",
+        "address->(address.ADDR_ID = member.ADDR_ID and address.ADDR_TYPE = member.PRIMARY_ADDR_TYPE) or (address.ADDR_ID = member.ADDR_ID and address.ADDR_TYPE = member.SECONDARY_ADDR_TYPE)",
+        "subscriber->(subscriber.SUB_ID = member.SUB_ID)"
+      ]
+    },
+    {
+      "name": "address",
+      "columnQuery": "address.ADDR_ID as \"address.ADDR_ID\",address.ADDR_TYPE as \"address.ADDR_TYPE\", address.IS_PROV as \"address.IS_PROV\",address.ADDRESS as \"address.ADDRESS\", address.CITY as \"address.CITY\", address.STATE as \"address.STATE\", address.ZIP as \"address.ZIP\", address.PHONE as \"address.PHONE\", address.FAX as \"address.FAX\", address.EMAIL as \"address.EMAIL\"",
+      "filterQuery": "",
+      "relatedTables": [
+        "provider",
+        "member"
+      ],
+      "keyColumns": [
+        "address.ADDR_ID",
+        "address.ADDR_TYPE"
+      ],
+      "relationshipList": [
+        "member->(member.ADDR_ID = address.ADDR_ID and member.PRIMARY_ADDR_TYPE = address.ADDR_TYPE) or (member.ADDR_ID = address.ADDR_ID and member.SECONDARY_ADDR_TYPE = address.ADDR_TYPE)",
+        "provider->(provider.ADDR_ID = address.ADDR_ID and provider.PRIMARY_ADDR_TYPE = address.ADDR_TYPE) or (provider.ADDR_ID = address.ADDR_ID and provider.SECONDARY_ADDR_TYPE = address.ADDR_TYPE)"
+      ]
+    },
+    {
+      "name": "dx_code",
+      "columnQuery": "dx_code.DX_CODE as \"dx_code.DX_CODE\", dx_code.DX_DESC as \"dx_code.DX_DESC\"",
+      "filterQuery": "",
+      "relatedTables": [
+        "claim_lines"
+      ],
+      "keyColumns": [
+        "dx_code.DX_CODE"
+      ],
+      "relationshipList": [
+        "claim_lines->(claim_lines.DX_CODE = dx_code.DX_CODE)"
+      ]
+    },
+    {
+      "name": "provider",
+      "columnQuery": " provider.ADDR_ID as \"provider.ADDR_ID\",provider.PRIMARY_ADDR_TYPE as \"provider.PRIMARY_ADDR_TYPE\",provider.SECONDARY_ADDR_TYPE as \"provider.SECONDARY_ADDR_TYPE\",provider.PROV_ID as \"provider.PROV_ID\", provider.PROV_NAME as \"provider.PROV_NAME\",provider.IS_PHYSICIAN as \"provider.IS_PHYSICIAN\",  provider.IS_FACILITY as \"provider.IS_FACILITY\", provider.TIN_SSN as \"provider.TIN_SSN\"",
+      "filterQuery": "",
+      "relatedTables": [
+        "address",
+        "claim"
+      ],
+      "keyColumns": [
+        "provider.PROV_ID",
+        "provider.ADDR_ID",
+        "provider.PRIMARY_ADDR_TYPE",
+        "provider.SECONDARY_ADDR_TYPE"
+      ],
+      "relationshipList": [
+        "claim->(claim.PROV_ID = provider.PROV_ID)",
+        "address->(address.ADDR_ID = provider.ADDR_ID and address.ADDR_TYPE = provider.PRIMARY_ADDR_TYPE) or (address.ADDR_ID = provider.ADDR_ID and address.ADDR_TYPE = provider.SECONDARY_ADDR_TYPE)"
+      ]
+    },
+    {
+      "name": "proc_code",
+      "columnQuery": "proc_code.PROC_CODE as \"proc_code.PROC_CODE\", proc_code.PROC_DESC as \"proc_code.PROC_DESC\"",
+      "filterQuery": "",
+      "relatedTables": [
+        "claim_lines"
+      ],
+      "keyColumns": [
+        "proc_code.PROC_CODE"
+      ],
+      "relationshipList": [
+        "claim_lines->(claim_lines.PROC_CODE = proc_code.PROC_CODE)"
+      ]
+    },
+    {
+      "name": "subscriber",
+      "columnQuery": "subscriber.SUB_ID as \"subscriber.SUB_ID\", subscriber.SUB_FIRST_NAME as \"subscriber.SUB_FIRST_NAME\", subscriber.SUB_LAST_NAME as \"subscriber.SUB_LAST_NAME\", subscriber.SUB_IS_ACTIVE as \"subscriber.SUB_IS_ACTIVE\", subscriber.FAMILY_LINK_ID as \"subscriber.FAMILY_LINK_ID\", subscriber.SSN as \"subscriber.SSN\", subscriber.ACTIVE_FROM_DATE as \"subscriber.ACTIVE_FROM_DATE\", subscriber.ACTIVE_TO_DATE as \"subscriber.ACTIVE_TO_DATE\"",
+      "filterQuery": "",
+      "relatedTables": [
+        "member",
+        "claim"
+      ],
+      "keyColumns": [
+        "subscriber.SUB_ID"
+      ],
+      "relationshipList": [
+        "claim->(claim.SUB_ID = subscriber.SUB_ID)",
+        "member->(member.SUB_ID = subscriber.SUB_ID)"
+      ]
+    },
+    {
+      "name": "claim_lines",
+      "columnQuery": "claim_lines.CLAIM_ID as \"claim_lines.CLAIM_ID\",claim_lines.DX_CODE as \"claim_lines.DX_CODE\",claim_lines.PROC_CODE as \"claim_lines.PROC_CODE\", claim_lines.CLAIM_GEN as \"claim_lines.CLAIM_GEN\", claim_lines.CLAIM_ADJ_DATE as \"claim_lines.CLAIM_ADJ_DATE\",claim_lines.CHARGES as \"claim_lines.CHARGES\"",
+      "filterQuery": "",
+      "relatedTables": [
+        "proc_code",
+        "dx_code"
+      ],
+      "keyColumns": [
+        "claim_lines.CLAIM_ID",
+        "claim_lines.CLAIM_GEN",
+        "claim_lines.DX_CODE",
+        "claim_lines.PROC_CODE"
+      ],
+      "relationshipList": [
+        "claim->(claim.CLAIM_ID = claim_lines.CLAIM_ID)",
+        "dx_code->(dx_code.DX_CODE = claim_lines.DX_CODE)",
+        "proc_code->(proc_code.PROC_CODE = claim_lines.PROC_CODE)"
+      ]
+    }
+  ],
+  "selectedTableList": [
+    "claim_lines",
+    "subscriber",
+    "proc_code",
+    "provider",
+    "dx_code",
+    "address",
+    "claim",
+    "member"
+  ],
+  "charReplace": {
+    
+  }
+}
